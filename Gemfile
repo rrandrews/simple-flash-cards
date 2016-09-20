@@ -18,6 +18,7 @@ gem 'autoprefixer-rails'
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'guard-livereload'
+  gem 'rspec-rails', '~> 3.5'
 end
 
 group :development do

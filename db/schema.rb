@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160919154654) do
+ActiveRecord::Schema.define(version: 20160920044519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,9 +18,9 @@ ActiveRecord::Schema.define(version: 20160919154654) do
   create_table "attempts", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "card_id"
-    t.boolean  "correct"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "response"
     t.index ["card_id"], name: "index_attempts_on_card_id", using: :btree
     t.index ["user_id"], name: "index_attempts_on_user_id", using: :btree
   end
@@ -38,6 +38,8 @@ ActiveRecord::Schema.define(version: 20160919154654) do
     t.boolean  "public"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "user_id"
+    t.index ["user_id"], name: "index_decks_on_user_id", using: :btree
   end
 
   create_table "responses", force: :cascade do |t|
@@ -46,6 +48,22 @@ ActiveRecord::Schema.define(version: 20160919154654) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["card_id"], name: "index_responses_on_card_id", using: :btree
+  end
+
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id"
+    t.integer  "deck_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deck_id"], name: "index_taggings_on_deck_id", using: :btree
+    t.index ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -68,5 +86,8 @@ ActiveRecord::Schema.define(version: 20160919154654) do
   add_foreign_key "attempts", "cards"
   add_foreign_key "attempts", "users"
   add_foreign_key "cards", "decks"
+  add_foreign_key "decks", "users"
   add_foreign_key "responses", "cards"
+  add_foreign_key "taggings", "decks"
+  add_foreign_key "taggings", "tags"
 end
